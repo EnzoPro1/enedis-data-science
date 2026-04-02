@@ -51,7 +51,7 @@ if st.button("Generate curve"):
 st.header("Data Preparation")
 
 try:
-    df_features = pd.read_csv("features_clients_pour_clustering.csv")
+    df_features = pd.read_csv("features_clients_pour_clustering.csv", sep=";")
 
     st.write("Preview of prepared data:")
     st.dataframe(df_features.head())
@@ -65,7 +65,7 @@ except:
 st.header("Clustering Results")
 
 try:
-    df_clusters = pd.read_csv("features_clients_avec_labels.csv")
+    df_clusters = pd.read_csv("features_clients_avec_labels.csv", sep=";")
 
     st.write("Preview of clustering results (RP / RS):")
     st.dataframe(df_clusters.head())
