@@ -1,16 +1,16 @@
-# ⚡ Projet Data Science : Détection et Analyse de Résidences (RP vs RS)
+# Projet Data Science : Détection et Analyse de Résidences (RP vs RS)
 
-## 📖 Présentation du Projet
+## Présentation du Projet
 Ce projet a été réalisé dans le cadre du cours de Data Science à ESIEE Paris. 
 L'objectif principal est d'analyser les courbes de charge électriques (données ouvertes Enedis RES2-6-9kVA) pour identifier, classer et simuler les comportements des clients en distinguant les **Résidences Principales (RP)** des **Résidences Secondaires (RS)**.
 
-## 👥 L'Équipe
+## L'Équipe
 * **Enzo MASSENGO** : Feature Engineering & Préparation des données
 * **Alexandre MUTH** : Clustering (K-Means) & Identification RP/RS
 * **Léo WIMART** : Classification & Prévision (Forecasting)
 * **Khadija WAHHABI** : Génération de courbes & Dashboard Streamlit
 
-## 🏗️ Structure du Dépôt
+## Structure du Dépôt
 Voici l'organisation de nos fichiers et de notre code :
 
 ```text
