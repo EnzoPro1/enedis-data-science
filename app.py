@@ -39,7 +39,7 @@ if st.button("Generate curve"):
     fig = px.line(df, x="time", y="consumption",
                   title=f"Generated curve - {client_type}")
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     st.write("This curve is artificially generated based on the selected client type.")
 
