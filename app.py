@@ -83,9 +83,9 @@ try:
 
     if "Label" in df_clusters.columns:
         st.write("Cluster label distribution:")
-        st.dataframe(df_clusters["Label"].value_counts().reset_index().rename(
-            columns={"index": "Label", "Label": "Count"}
-        ))
+        label_counts = df_clusters["Label"].value_counts().reset_index()
+        label_counts.columns = ["Label", "Count"]
+        st.dataframe(label_counts)
 
 except Exception:
     st.warning("Clustering results file not found.")
@@ -122,19 +122,24 @@ except Exception:
 st.header("Forecasting")
 
 try:
-    # Load files as strings to avoid ID format problems
-    df_forecast = pd.read_csv("serie_temporelle_journaliere_pour_forecasting.csv", sep=";", dtype={"ID": str})
-    df_labels = pd.read_csv("features_clients_avec_labels.csv", sep=";", dtype={"ID": str})
+    df_forecast = pd.read_csv(
+        "serie_temporelle_journaliere_pour_forecasting.csv",
+        sep=";",
+        dtype={"ID": str}
+    )
 
-    # Clean ID format
+    df_labels = pd.read_csv(
+        "features_clients_avec_labels.csv",
+        sep=";",
+        dtype={"ID": str}
+    )
+
     df_forecast["ID"] = df_forecast["ID"].astype(str).str.strip()
     df_labels["ID"] = df_labels["ID"].astype(str).str.strip()
     df_labels["Label"] = df_labels["Label"].astype(str).str.strip()
 
-    # Keep only ID + Label
     df_labels_small = df_labels[["ID", "Label"]].drop_duplicates()
 
-    # Merge
     df_forecast = df_forecast.merge(df_labels_small, on="ID", how="left")
 
     st.write("Dataset used for consumption forecasting:")
@@ -144,11 +149,15 @@ try:
     st.write(df_forecast["Label"].dropna().unique())
 
     st.write("Number of rows by label:")
-    st.dataframe(df_forecast["Label"].value_counts(dropna=False).reset_index().rename(
-        columns={"index": "Label", "Label": "Count"}
-    ))
+    forecast_counts = df_forecast["Label"].value_counts(dropna=False).reset_index()
+    forecast_counts.columns = ["Label", "Count"]
+    st.dataframe(forecast_counts)
 
-    forecast_label = st.selectbox("Select client type for forecasting", ["RP", "RS"], key="forecast_label")
+    forecast_label = st.selectbox(
+        "Select client type for forecasting",
+        ["RP", "RS"],
+        key="forecast_label"
+    )
 
     df_filtered = df_forecast[df_forecast["Label"] == forecast_label].copy()
 
@@ -173,7 +182,6 @@ try:
 
         st.plotly_chart(fig_forecast, use_container_width=True)
 
-        # Bonus: compare both RP and RS on the same graph
         df_compare = (
             df_forecast.dropna(subset=["Label"])
             .groupby(["date_jour", "Label"], as_index=False)["conso_journaliere_kWh"]
