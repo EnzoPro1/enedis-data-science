@@ -22,11 +22,14 @@ Voici l'organisation de nos fichiers et de notre code :
 │   ├── serie_temporelle_journaliere.csv
 │   └── serie_temporelle_brute.csv
 │
-├── data_preparation.py       # Script de nettoyage, FFT et Feature Engineering
-├── clustering_model.py       # Algorithme K-Means et ACP
-├── classification_forecasting.py # Modèles prédictifs (LogReg, PyTorch, ARIMA...)
-├── generation.py             # Modèle de génération conditionnelle (RP/RS)
+├── data_preparation.py       # Nettoyage, conversion, feature engineering et export CSV
+├── clustering_model.py       # Clustering K-Means et attribution des labels RP/RS
+├── classification.py         # Classification RP/RS avec réseau de neurones (MLPClassifier)
+├── forecasting.py            # Prévision de consommation avec Régression Linéaire et ARIMA
+├── generation.py             # Génération de courbes artificielles RP/RS
 ├── app.py                    # Script principal du Dashboard Streamlit
 │
 ├── requirements.txt          # Liste des bibliothèques nécessaires
 └── README.md                 # Documentation du projet
+
+
