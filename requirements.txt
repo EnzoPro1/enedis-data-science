@@ -4,4 +4,7 @@ scipy
 scikit-learn
 plotly
 streamlit
+statsmodels
+matplotlib
+seaborn
 torch
