@@ -46,7 +46,7 @@ if st.button("Generate curve"):
     st.write("This curve is artificially generated based on the selected client type.")
 
 # ========================
-# DATA PREPARATION (PART 1)
+# DATA PREPARATION 
 # ========================
 st.header("Data Preparation")
 
@@ -60,7 +60,7 @@ except:
     st.warning("Data preparation file not found.")
 
 # ========================
-# CLUSTERING (PART 2)
+# CLUSTERING 
 # ========================
 st.header("Clustering Results")
 
@@ -74,13 +74,37 @@ except:
     st.warning("Clustering results file not found.")
 
 # ========================
-# CLASSIFICATION (TO DO)
+# CLASSIFICATION 
 # ========================
 st.header("Classification")
-st.write("Prediction RS / RP (to be connected with the model)")
+
+try:
+    df_classif = pd.read_csv("features_clients_avec_labels.csv", sep=";")
+    st.write("Dataset used for RP / RS classification:")
+    st.dataframe(df_classif.head())
+
+    st.write("""
+    The classification model uses the engineered features and the cluster labels (RP / RS).
+    A neural network (MLPClassifier) is trained to predict whether a client is RP or RS.
+    """)
+
+except:
+    st.warning("Classification file not found.")
 
 # ========================
-# FORECASTING (TO DO)
+# FORECASTING 
 # ========================
 st.header("Forecasting")
-st.write("Future consumption prediction (to be connected)")
+
+try:
+    df_forecast = pd.read_csv("serie_temporelle_journaliere_pour_forecasting.csv", sep=";")
+    st.write("Dataset used for consumption forecasting:")
+    st.dataframe(df_forecast.head())
+
+    st.write("""
+    Forecasting is performed on daily electricity consumption.
+    Two models are compared: Linear Regression and ARIMA.
+    """)
+
+except:
+    st.warning("Forecasting file not found.")
