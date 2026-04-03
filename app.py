@@ -122,36 +122,54 @@ except Exception:
 st.header("Forecasting")
 
 try:
+    # 1. Load forecasting data
     df_forecast = pd.read_csv("serie_temporelle_journaliere_pour_forecasting.csv", sep=";")
+
+    # 2. Load labels RP / RS
+    df_labels = pd.read_csv("features_clients_avec_labels.csv", sep=";")
+
+    # 3. Keep only useful columns for merge
+    df_labels_small = df_labels[["ID", "Label"]]
+
+    # 4. Merge forecasting data with RP/RS labels
+    df_forecast = df_forecast.merge(df_labels_small, on="ID", how="left")
 
     st.write("Dataset used for consumption forecasting:")
     st.dataframe(df_forecast.head())
 
     st.write("""
 Forecasting is performed on daily electricity consumption.
-Two models are compared: Linear Regression and ARIMA.
+Here, the dashboard compares the average daily consumption depending on the client type: RP or RS.
 """)
 
     st.write("Number of columns:", len(df_forecast.columns))
     st.write("Columns:", list(df_forecast.columns))
 
-    if "ID" in df_forecast.columns:
-        selected_id = st.selectbox(
-            "Select a client ID for forecasting visualization",
-            df_forecast["ID"].unique()
-        )
+    # 5. Select RP or RS
+    forecast_label = st.selectbox("Select client type for forecasting", ["RP", "RS"])
 
-        df_client = df_forecast[df_forecast["ID"] == selected_id].copy()
-        df_client["date_jour"] = pd.to_datetime(df_client["date_jour"])
+    # 6. Filter data by selected label
+    df_filtered = df_forecast[df_forecast["Label"] == forecast_label].copy()
 
-        fig_forecast = px.line(
-            df_client,
-            x="date_jour",
-            y="conso_journaliere_kWh",
-            title=f"Daily consumption for client {selected_id}"
-        )
+    # 7. Convert date column
+    df_filtered["date_jour"] = pd.to_datetime(df_filtered["date_jour"])
 
-        st.plotly_chart(fig_forecast, use_container_width=True)
+    # 8. Compute average daily consumption for selected type
+    df_avg = (
+        df_filtered.groupby("date_jour")["conso_journaliere_kWh"]
+        .mean()
+        .reset_index()
+    )
+
+    # 9. Plot average curve
+    fig_forecast = px.line(
+        df_avg,
+        x="date_jour",
+        y="conso_journaliere_kWh",
+        title=f"Average daily consumption - {forecast_label}"
+    )
+
+    st.plotly_chart(fig_forecast, use_container_width=True)
 
 except Exception:
     st.warning("Forecasting file not found.")
